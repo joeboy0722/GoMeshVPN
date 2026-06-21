@@ -1,0 +1,13 @@
+# Wails 預設排除
+build/bin/
+node_modules/
+frontend/dist/
+frontend/node_modules/
+
+# Go 編譯產物與 Windows VPN 驅動
+*.exe
+wintun.dll
+
+# 本地設定與快取
+*.log
+.DS_Store

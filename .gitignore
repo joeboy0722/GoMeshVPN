@@ -1,0 +1,17 @@
+# 環境與編譯工具目錄
+/mingw64/
+/pkg/
+/wintun/
+
+# Windows 下運作的 VPN 驅動檔
+wintun.dll
+
+# 編譯出的執行檔與本地資料庫
+*.exe
+*.db
+
+# 系統與 IDE 相關
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

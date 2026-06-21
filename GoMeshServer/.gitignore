@@ -1,0 +1,13 @@
+# Wails 預設排除
+build/bin/
+node_modules/
+frontend/dist/
+frontend/node_modules/
+
+# Go 編譯產物與資料庫
+*.exe
+*.db
+
+# 本地日誌與快取
+*.log
+.DS_Store

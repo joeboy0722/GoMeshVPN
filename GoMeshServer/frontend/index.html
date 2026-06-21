@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>GoMesh Server Manager</title>
+</head>
+
+<body>
+    <header>
+        <div class="brand">GOMESH :: SERVER_ADMIN</div>
+        <div class="server-status">
+            <span class="status-indicator" id="status-dot"></span>
+            <span id="status-text">STOPPED</span>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <nav>
+            <button class="active" onclick="showPage('dashboard')">DASHBOARD</button>
+            <button onclick="showPage('users')">USER_MGMT</button>
+            <button onclick="showPage('groups')">GROUP_MGMT</button>
+            <button onclick="showPage('settings')">SETTINGS</button>
+        </nav>
+
+        <main>
+            <!-- DASHBOARD PAGE -->
+            <div id="dashboard" class="page active">
+                <h2>SERVER CONTROL</h2>
+
+                <div class="form-group">
+                    <label>TCP PORT (CONTROL)</label>
+                    <input type="text" id="config-tcp" value="8889">
+                </div>
+
+                <div class="form-group">
+                    <label>UDP PORT (DATA)</label>
+                    <input type="text" id="config-udp" value="8888">
+                </div>
+
+                <div class="switch-group">
+                    <input type="checkbox" id="config-autoreg" checked>
+                    <label for="config-autoreg" style="margin:0; color:var(--primary-color);">ENABLE
+                        AUTO-REGISTRATION</label>
+                </div>
+
+                <button class="btn large" id="btn-toggle-server" onclick="toggleServer()">INITIALIZE SERVER</button>
+
+                <h2>SYSTEM LOG</h2>
+                <div id="log-console">
+                    <p>[SYSTEM] Ready.</p>
+                </div>
+            </div>
+
+            <!-- USERS PAGE -->
+            <div id="users" class="page">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h2>USER MANAGEMENT</h2>
+                    <button class="btn" onclick="openModal('modal-add-user')">+ NEW USER</button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Virtual IP</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user-list">
+                        <!-- JS Populated -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- GROUPS PAGE -->
+            <div id="groups" class="page">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h2>GROUP MANAGEMENT</h2>
+                    <button class="btn" onclick="openModal('modal-add-group')">+ NEW GROUP</button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Group Name</th>
+                            <th>Password</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="group-list">
+                        <!-- JS Populated -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SETTINGS PAGE (Placeholder) -->
+            <div id="settings" class="page">
+                <h2>SETTINGS</h2>
+                <p>Database Path: ./vpn_data.db</p>
+                <p>Version: 1.0.0 (Wails Edition)</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODALS -->
+
+    <!-- Add User Modal -->
+    <div id="modal-add-user" class="modal">
+        <div class="modal-content">
+            <h3>CREATE NEW USER</h3>
+            <div class="form-group">
+                <label>USERNAME</label>
+                <input type="text" id="new-user-name">
+            </div>
+            <div class="form-group">
+                <label>PASSWORD</label>
+                <input type="password" id="new-user-pass">
+            </div>
+            <div class="modal-footer">
+                <button class="btn danger" onclick="closeModal('modal-add-user')">CANCEL</button>
+                <button class="btn" onclick="createUser()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Group Modal -->
+    <div id="modal-add-group" class="modal">
+        <div class="modal-content">
+            <h3>CREATE NEW GROUP</h3>
+            <div class="form-group">
+                <label>GROUP NAME</label>
+                <input type="text" id="new-group-name">
+            </div>
+            <div class="form-group">
+                <label>PASSWORD</label>
+                <input type="password" id="new-group-pass">
+            </div>
+            <div class="modal-footer">
+                <button class="btn danger" onclick="closeModal('modal-add-group')">CANCEL</button>
+                <button class="btn" onclick="createGroup()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

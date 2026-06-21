@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Go-Mesh VPN</title>
+</head>
+
+<body>
+
+    <div class="scanlines"></div>
+    <div class="noise"></div>
+
+    <div id="app-login" class="layer visible">
+        <div class="login-container">
+            <h1 class="glitch" data-text="NEURAL_LINK">NEURAL_LINK</h1>
+            <div class="input-group">
+                <label>TARGET SERVER</label>
+                <input id="login-addr" type="text" placeholder="IP:PORT" />
+            </div>
+            <div class="input-group">
+                <label>AGENT ID</label>
+                <input id="login-user" type="text" placeholder="Username" />
+            </div>
+            <div class="input-group">
+                <label>ACCESS KEY</label>
+                <input id="login-pass" type="password" placeholder="Password" />
+            </div>
+            <button class="cy-btn" onclick="doConnect()">INITIALIZE_CONNECTION</button>
+            <div id="login-msg" class="status-msg"></div>
+        </div>
+    </div>
+
+    <div id="app-dashboard" class="layer hidden">
+        <header class="hud-header">
+            <div class="hud-item">
+                <span class="label">STATUS</span>
+                <span id="status-display" class="value text-green">SECURE</span>
+            </div>
+            <div class="hud-item">
+                <span class="label">VIRTUAL IP</span>
+                <span id="my-ip" class="value">---.---.---.---</span>
+            </div>
+            <div class="hud-item">
+                <button class="cy-btn small danger" onclick="doDisconnect()">ABORT</button>
+            </div>
+        </header>
+
+        <main class="hud-main">
+            <section class="panel left-panel">
+                <h3>// NETWORK_CONFIG</h3>
+                <div class="input-group compact">
+                    <input id="group-name" type="text" placeholder="GROUP NAME" />
+                </div>
+                <div class="input-group compact">
+                    <input id="group-pass" type="password" placeholder="PASSWORD (OPT)" />
+                </div>
+                <div class="btn-row">
+                    <button class="cy-btn small" onclick="doJoinGroup()">JOIN</button>
+                    <button class="cy-btn small" onclick="doCreateGroup()">CREATE</button>
+                </div>
+                <div class="current-group-display">
+                    <span class="label">CURRENT SECTOR:</span>
+                    <span id="current-group" class="value">NO_SIGNAL</span>
+                </div>
+            </section>
+
+            <section class="panel right-panel">
+                <h3>// ACTIVE_PEERS <span id="peer-count" class="badge">0</span></h3>
+                <div class="peer-list-container">
+                    <ul id="peer-list"></ul>
+                </div>
+            </section>
+        </main>
+
+        <footer class="hud-footer">
+            <h3>// SYSTEM_LOG</h3>
+            <div id="console-log" class="console-box">
+                <div class="log-line">System initialized... awaiting input.</div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="context-menu">
+        <button id="btn-leave-group">LEAVE SECTOR</button>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
