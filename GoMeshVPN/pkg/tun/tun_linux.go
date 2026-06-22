@@ -112,6 +112,12 @@ func (d *LinuxDevice) SetIP(ip string) error {
 		return fmt.Errorf("ip link up error: %v, output: %s", err, string(out))
 	}
 
+	// 設定 MTU (與 Windows 端統一為 1280，防止大封包丟失)
+	cmdMTU := exec.Command("ip", "link", "set", "dev", d.Name, "mtu", "1280")
+	if out, err := cmdMTU.CombinedOutput(); err != nil {
+		return fmt.Errorf("ip link set mtu error: %v, output: %s", err, string(out))
+	}
+
 	// ip addr add <ip>/10 dev <name>
 	cmdAddr := exec.Command("ip", "addr", "add", ip+"/10", "dev", d.Name)
 	if out, err := cmdAddr.CombinedOutput(); err != nil {

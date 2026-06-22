@@ -123,16 +123,16 @@ func (d *WintunDevice) SetIP(ip string) error {
 		return fmt.Errorf("winipcfg set ip error: %v", err)
 	}
 
-	// 設定 MTU
+	// 設定 MTU (改為 1280 以提高不同網路環境下的相容性，防範大封包丟失)
 	ipif, err := luid.IPInterface(windows.AF_INET)
 	if err != nil {
 		fmt.Printf("[WARN] Failed to get IP interface: %v\n", err)
 	} else {
-		ipif.NLMTU = 1300
+		ipif.NLMTU = 1280
 		if err := ipif.Set(); err != nil {
 			fmt.Printf("[WARN] Failed to set MTU via winipcfg: %v\n", err)
 		} else {
-			fmt.Printf("[INFO] MTU set to 1300 via WinAPI\n")
+			fmt.Printf("[INFO] MTU set to 1280 via WinAPI\n")
 		}
 	}
 

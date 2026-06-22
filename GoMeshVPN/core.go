@@ -298,17 +298,19 @@ func (c *Client) StartVPN() error {
 	if c.Tun != nil {
 		c.log("[INFO] Closing existing TUN interface...")
 		c.Tun.Close()
-		c.Tun = nil
 	}
 
 	// 1.5. 同樣關閉舊的 UDP 連線，使 udpReadLoop 能立刻退出（否則要等最多 1 秒超時）
 	if c.UDPConn != nil {
 		c.UDPConn.Close()
-		c.UDPConn = nil
 	}
 
 	// 2. 等待所有舊協程安全退出 (此時會瞬間完成)
 	c.wg.Wait()
+
+	// 協程完全退出後，再安全清空變數，避免併發存取
+	c.Tun = nil
+	c.UDPConn = nil
 	c.ctx, c.cancelFunc = context.WithCancel(context.Background())
 
 	// 3. 提前重置時間戳並發送心跳續命
@@ -550,6 +552,11 @@ func (c *Client) udpReadLoop() {
 		default:
 		}
 
+		// 檢查連線是否為 nil，避免重連時觸發空指標異常
+		if c.UDPConn == nil {
+			return
+		}
+
 		// 設置讀取超時以允許週期性檢查 context
 		c.UDPConn.SetReadDeadline(time.Now().Add(1 * time.Second))
 
@@ -585,7 +592,10 @@ func (c *Client) udpReadLoop() {
 			if err != nil {
 				continue
 			}
-			c.Tun.WritePacket(decrypted)
+			// 檢查 TUN 裝置是否為 nil，避免重連時觸發空指標異常
+			if c.Tun != nil {
+				c.Tun.WritePacket(decrypted)
+			}
 		} else if pktType == protocol.UDPTypeKeepAlive {
 			// 伺服器回傳的 KeepAlive 響應，我們已經更新了 activity，這裡不需要額外處理
 		}
@@ -646,7 +656,10 @@ func (c *Client) sendKeepAlive() {
 	binary.BigEndian.PutUint32(msg[5:9], 0)
 	copy(msg[9:], enc)
 
-	c.UDPConn.Write(msg)
+	// 加入 nil 檢查，避免在重連時觸發空指標異常
+	if c.UDPConn != nil {
+		c.UDPConn.Write(msg)
+	}
 }
 
 func (c *Client) sendTCPHeartbeat() {
@@ -873,17 +886,19 @@ func (c *Client) restartVPN() error {
 	if c.Tun != nil {
 		c.log("[INFO] Closing existing TUN interface for restart...")
 		c.Tun.Close()
-		c.Tun = nil
 	}
 
 	// 3. 關閉舊 UDP 連線，使舊 udpReadLoop 立即退出
 	if c.UDPConn != nil {
 		c.UDPConn.Close()
-		c.UDPConn = nil
 	}
 
 	// 4. 等待所有舊協程安全退出 (消除併發競爭 Race Condition)
 	c.wg.Wait()
+
+	// 協程完全退出後，再安全清空變數，避免併發存取
+	c.Tun = nil
+	c.UDPConn = nil
 	c.ctx, c.cancelFunc = context.WithCancel(context.Background())
 
 	// 5. 重新創建並初始化 TUN 介面
