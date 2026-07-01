@@ -43,16 +43,26 @@ GoMeshVPN 是一款基於 **Wails v2** 與 **Go** 語言開發的輕量級、高
 
 ---
 
-### 編譯伺服器端 (Build Server)
+### 編譯與執行伺服器端 (Build & Run Server)
 1. 進入伺服器端目錄：
    ```bash
    cd GoMeshServer
    ```
 2. 使用 Wails 進行編譯：
+   為確保命令行控制台能正常與使用者互動，且 GUI 模式下能自動隱藏彈出的黑色控制台視窗，請加上 `-windowsconsole` 參數進行打包：
    ```bash
-   wails build
+   wails build -windowsconsole
    ```
    *編譯完成後的執行檔會產生於 `GoMeshServer/build/bin/` 目錄中。*
+
+3. 執行與控制：
+   - **GUI 桌面模式**：直接雙擊 `GoMeshServer.exe` 執行，或者不帶任何參數在 CMD 中啟動。
+   - **命令列互動模式 (Console Mode)**：在 CMD 中指定監聽埠啟動，例如：
+     ```cmd
+     GoMeshServer.exe -tcp_port 8889 -udp_port 8888 -auto_registration true
+     ```
+     啟動後會進入互動控制台並出現 `>` 提示符，您可直接輸入 `status`、`stop`、`start`、`shutdown`/`exit` 等指令即時操作。
+   - **外部控制**：若伺服器在背景運行，可在另一個 CMD 視窗執行 `GoMeshServer.exe stop` 安全停止服務。
 
 ---
 
