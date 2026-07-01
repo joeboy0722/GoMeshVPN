@@ -48,21 +48,26 @@ GoMeshVPN 是一款基於 **Wails v2** 與 **Go** 語言開發的輕量級、高
    ```bash
    cd GoMeshServer
    ```
-2. 使用 Wails 進行編譯：
-   為確保命令行控制台能正常與使用者互動，且 GUI 模式下能自動隱藏彈出的黑色控制台視窗，請加上 `-windowsconsole` 參數進行打包：
-   ```bash
-   wails build -windowsconsole
-   ```
-   *編譯完成後的執行檔會產生於 `GoMeshServer/build/bin/` 目錄中。*
+2. 進行編譯（依部署需求選擇）：
+   - **純命令行模式 (推薦伺服器端部署 💡)**：
+     不依賴 WebView2 與圖形庫 DLL，100% 解決在 Windows 服務或 Session 0 背景管理器中啟動失敗（`0xC0000142`）的問題。請加上 `headless` 標籤並加上 `-cli` 尾綴：
+     ```bash
+     go build -tags headless -o GoMeshServer-cli.exe .
+     ```
+   - **GUI 桌面與控制台雙模式**：
+     保留桌面管理面板，並支援 CMD 指令互動（編譯後 GUI 模式下會自動隱藏黑色控制台視窗）：
+     ```bash
+     wails build -windowsconsole
+     ```
+     *編譯完成後的執行檔預設產生於 `GoMeshServer/build/bin/` 目錄中。*
 
-3. 執行與控制：
-   - **GUI 桌面模式**：直接雙擊 `GoMeshServer.exe` 執行，或者不帶任何參數在 CMD 中啟動。
+3. 執行與控制 (以純命令行 `GoMeshServer-cli.exe` 為例)：
    - **命令列互動模式 (Console Mode)**：在 CMD 中指定監聽埠啟動，例如：
      ```cmd
-     GoMeshServer.exe -tcp_port 8889 -udp_port 8888 -auto_registration true
+     GoMeshServer-cli.exe -tcp_port 8889 -udp_port 8888 -auto_registration true
      ```
      啟動後會進入互動控制台並出現 `>` 提示符，您可直接輸入 `status`、`stop`、`start`、`shutdown`/`exit` 等指令即時操作。
-   - **外部控制**：若伺服器在背景運行，可在另一個 CMD 視窗執行 `GoMeshServer.exe stop` 安全停止服務。
+   - **外部控制**：若伺服器在背景運行，可在另一個 CMD 視窗執行 `GoMeshServer-cli.exe stop` 安全停止服務。
 
 ---
 

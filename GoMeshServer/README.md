@@ -51,16 +51,23 @@ GoMeshServer.exe stop
 
 ## 建置與打包
 
-本專案需要 Go 語言與 Wails CLI 支援。
+本專案需要 Go 語言支援。
 
-### 1. 使用 Wails 打包 (推薦)
-為確保命令列互動式控制台能正常運作，請使用 `-windowsconsole` 參數進行 Windows 打包：
+### 1. 純命令列模式打包 (推薦伺服器端部署 💡)
+若您要在 Windows Server 等無 GUI 或使用 Session 0 背景管理的環境下部署，請使用 `headless` 標籤編譯。此版本完全不依賴 GUI 視窗與 WebView2，體積更小且絕不會報 DLL 載入失敗錯誤：
+```bash
+go build -tags headless -o GoMeshServer-cli.exe .
+```
+*這會產生帶有 `-cli` 尾綴的純命令列執行檔。*
+
+### 2. 使用 Wails 打包 (包含 GUI 介面)
+如果您需要保留桌面 GUI 面板，且希望在 CMD 執行時能進行指令互動，請在 Wails 打包時加上 `-windowsconsole`：
 ```bash
 wails build -windowsconsole
 ```
-*打包後的執行檔將輸出至 `build/bin/GoMeshServer.exe`。*
+*打包後的執行檔會位於 `build/bin/GoMeshServer.exe`。在 Windows 雙擊運行 GUI 時，程式內部會自動隱藏彈出的黑色控制台視窗。*
 
-### 2. 本地開發偵錯
+### 3. 本地開發偵錯
 - 啟動熱重載開發環境：
   ```bash
   wails dev
