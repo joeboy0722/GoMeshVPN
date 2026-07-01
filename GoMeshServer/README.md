@@ -56,7 +56,7 @@ GoMeshServer.exe stop
 ### 1. 純命令列模式打包 (推薦伺服器端部署 💡)
 若您要在 Windows Server 等無 GUI 或使用 Session 0 背景管理的環境下部署，請使用 `headless` 標籤編譯。此版本完全不依賴 GUI 視窗與 WebView2，體積更小且絕不會報 DLL 載入失敗錯誤：
 ```bash
-go build -tags headless -o GoMeshServer-cli.exe .
+go build -tags headless -ldflags "-extldflags '-static'" -o GoMeshServer-cli.exe .
 ```
 *這會產生帶有 `-cli` 尾綴的純命令列執行檔。*
 

@@ -52,7 +52,7 @@ GoMeshVPN 是一款基於 **Wails v2** 與 **Go** 語言開發的輕量級、高
    - **純命令行模式 (推薦伺服器端部署 💡)**：
      不依賴 WebView2 與圖形庫 DLL，100% 解決在 Windows 服務或 Session 0 背景管理器中啟動失敗（`0xC0000142`）的問題。請加上 `headless` 標籤並加上 `-cli` 尾綴：
      ```bash
-     go build -tags headless -o GoMeshServer-cli.exe .
+     go build -tags headless -ldflags "-extldflags '-static'" -o GoMeshServer-cli.exe .
      ```
    - **GUI 桌面與控制台雙模式**：
      保留桌面管理面板，並支援 CMD 指令互動（編譯後 GUI 模式下會自動隱藏黑色控制台視窗）：
